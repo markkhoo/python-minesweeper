@@ -5,49 +5,70 @@
 #         print(j, end=" ")
 #     print()
 
-gamestate = 0
-x = 2
-y = 2
+# Global Variables
+gameState = 0
+xy = 4
 bombs = 1
-
-
-def checkInt(var):
-    global gamestate
-
-    if var.isdigit():
-        var = int(var)
-        gamestate += 1
-
-    else:
-        print("enter an integer")
-
-    return
+bombsMax = 1
+bombsMin = 1
 
 
 while True:
-    if gamestate == 0:
+    if gameState == 0:
 
-        # place holder line
         print()
         print("Game Start")
         print()
-        gamestate += 1
+        gameState += 1
 
-    elif gamestate == 1:
-        x = input("width of map:  ")
-        print("width of map: ", x)
-        checkInt(x,)
+    # USER chooses Map Square Size
+    elif gameState == 1:
+        print("Enter an integer between 4 and 40")
+        xy = input("width & height of map:  ")
+                
+        if xy.isdigit():
+            xy = int(xy)
 
-    elif gamestate == 2:
-        y = input("height of map:  ")
-        print("height of map: ", y)
-        checkInt(y)
+            if xy >= 4 and xy <= 40:
+                print()
+                print("width & height of map: ", xy)
+                print()
+                gameState += 1
+            else: 
+                print()
+                print("Invalid Input, Enter an Integer between 4 and 40")
+                print()
 
-    elif gamestate == 3:
+        else:
+            print()
+            print("Invalid Input, Enter an Integer")
+            print()
+
+    # USER chooses Number of Bombs
+    elif gameState == 2:
+        bombsMin = xy + 1
+        bombsMax = xy * xy // 2 + 1
+        print("Enter a integer between ", bombsMin, " and ", bombsMax)
         bombs = input("number of bombs:  ")
-        print("number of bombs: ", bombs)
-        checkInt(bombs)
+
+        if bombs.isdigit():
+            bombs = int(bombs)
+
+            if bombs >= bombsMin and bombs <= bombsMax:
+                print()
+                print("number of bombs: ", bombs)
+                print()
+                gameState += 1
+            else:
+                print()
+                print("Invalid Input, Enter a Integer between ", bombsMin, " and ", bombsMax)
+                print()
+
+        else:
+            print()
+            print("Invalid Input, Enter a Integer")
+            print()
 
     else:
-        print("height: ", y, "width: ", x, "bombs: ", bombs)
-        gamestate = 0
+        print("Map height/width: ", xy, "Number of Bombs: ", bombs)
+        gameState = 0
