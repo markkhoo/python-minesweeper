@@ -18,6 +18,7 @@ def displayShownMap():
             for j in i:
                 print(j, end=" ")
             print()
+    return
 
 def displayShownHidden():
     global gameMapHidden
@@ -26,6 +27,7 @@ def displayShownHidden():
             for j in i:
                 print(j, end=" ")
             print()
+    return
 
 while True:
     # Reset Global Variables
@@ -108,9 +110,10 @@ while True:
             gameMapShown.append(rowShown)
 
         gameState += 1
+
         print()
         print("To select a tile, enter an input as 'column, row'")
-        print("(Example: 0,0 - to select top left corner)")
+        print("(Example: 1,1 - to select top left corner)")
         print()
 
     # USER inputs col/row coords to play the game
@@ -119,7 +122,7 @@ while True:
         displayShownMap()
         print()
 
-        userInput = input("'column, row': ")
+        userInput = input("column,row: ")
 
     else:
         
