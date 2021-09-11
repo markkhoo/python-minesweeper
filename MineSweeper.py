@@ -123,6 +123,21 @@ while True:
         print()
 
         userInput = input("column,row: ")
+        userInput = userInput.replace(" ", "").split(",")
+
+        if len(userInput) < 2:
+            print()
+            print("Invalid input! Enter an input as 'column, row'")
+            print("(Example: 1,1 - to select top left corner)")
+
+        elif userInput[0].isdigit() and userInput[1].isdigit():
+            userInput = [int(userInput[0]), int(userInput[1])]
+            print(userInput)
+
+        else:
+            print()
+            print("Invalid input! Enter an input as 'column, row'")
+            print("(Example: 1,1 - to select top left corner)")
 
     else:
         
