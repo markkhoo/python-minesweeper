@@ -11,7 +11,7 @@ gameMapHidden = []
 gameMapShown = []
 
 
-def displayShownMap():
+def displayMapShown():
     global gameMapShown
 
     for i in gameMapShown:
@@ -20,7 +20,7 @@ def displayShownMap():
             print()
     return
 
-def displayShownHidden():
+def displayMapHidden():
     global gameMapHidden
 
     for i in gameMapHidden:
@@ -28,6 +28,20 @@ def displayShownHidden():
                 print(j, end=" ")
             print()
     return
+
+def bombAdjCount(row, col):
+    global xy
+    global gameMapHidden
+
+    result = 0
+
+    if row < 0 or col < 0 or row >= xy or col >= xy:
+        result = 0
+    else:
+        if gameMapHidden[row][col] == "X":
+            result = 1
+
+    return result
 
 while True:
     # Reset Global Variables
@@ -38,11 +52,12 @@ while True:
         print()
 
         xy = 4
-        bombs = 5
-        bombsMax = 5
-        bombsMin = 9
+        bombs = 2
+        bombsMax = 2
+        bombsMin = 4
         gameMapHidden = []
         gameMapShown = []
+        gameMapHiddenDebug = []
 
         gameState += 1
 
@@ -71,8 +86,8 @@ while True:
 
     # USER chooses Number of Bombs
     elif gameState == 2:
-        bombsMin = xy + 1
-        bombsMax = xy * xy // 2 + 1
+        bombsMin = xy // 3 + 1
+        bombsMax = xy * xy // 4
         print("Enter a integer between ", bombsMin, " and ", bombsMax)
         bombs = input("number of bombs:  ")
 
@@ -109,6 +124,32 @@ while True:
             gameMapHidden.append(rowHidden)
             gameMapShown.append(rowShown)
 
+        for i in range(xy):
+            for j in range(xy):
+
+                adjCount = 0
+
+                # The following code will check adjacent tiles for bombs starting from the Upper Left going clockwise
+                # Top Left
+                adjCount += bombAdjCount(i - 1, j - 1)
+                # Top Mid
+                adjCount += bombAdjCount(i - 1, j)
+                # Top Right
+                adjCount += bombAdjCount(i - 1, j + 1)
+                # Mid Right
+                adjCount += bombAdjCount(i, j + 1)
+                # Bot Right
+                adjCount += bombAdjCount(i + 1, j + 1)
+                # Bot Mid
+                adjCount += bombAdjCount(i + 1, j)
+                # Bot Left
+                adjCount += bombAdjCount(i + 1, j - 1)
+                # Mid Left
+                adjCount += bombAdjCount(i, j - 1)
+
+                if gameMapHidden[i][j] == "." and adjCount > 0:
+                    gameMapHidden[i][j] = adjCount
+
         gameState += 1
 
         print()
@@ -119,7 +160,7 @@ while True:
     # USER inputs col/row coords to play the game
     elif gameState == 4:
         print()
-        displayShownMap()
+        displayMapShown()
         print()
 
         userInput = input("column,row: ")
