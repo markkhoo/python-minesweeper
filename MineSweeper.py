@@ -3,7 +3,7 @@ from random import sample
 
 # Global Variables
 gameState = 0
-xy = 4
+xy = 8
 bombs = 1
 bombsMax = 1
 bombsMin = 1
@@ -51,32 +51,31 @@ while True:
         print("Game Start")
         print()
 
-        xy = 4
-        bombs = 2
-        bombsMax = 2
+        xy = 8
+        bombs = 4
+        bombsMax = 16
         bombsMin = 4
         gameMapHidden = []
         gameMapShown = []
-        gameMapHiddenDebug = []
 
         gameState += 1
 
     # USER chooses Map Square Size
     elif gameState == 1:
-        print("Enter an integer between 4 and 20")
+        print("Enter an integer between 8 and 20")
         xy = input("width & height of map:  ")
 
         if xy.isdigit():
             xy = int(xy)
 
-            if xy >= 4 and xy <= 20:
+            if xy >= 8 and xy <= 20:
                 print()
                 print("width & height of map: ", xy)
                 print()
                 gameState += 1
             else:
                 print()
-                print("Invalid Input, Enter an Integer between 4 and 20")
+                print("Invalid Input, Enter an Integer between 8 and 20")
                 print()
 
         else:
@@ -86,8 +85,8 @@ while True:
 
     # USER chooses Number of Bombs
     elif gameState == 2:
-        bombsMin = xy // 3 + 1
-        bombsMax = xy * xy // 4
+        bombsMin = xy // 2
+        bombsMax = xy * 2
         print("Enter a integer between ", bombsMin, " and ", bombsMax)
         bombs = input("number of bombs:  ")
 
@@ -160,7 +159,7 @@ while True:
     # USER inputs col/row coords to play the game
     elif gameState == 4:
         print()
-        displayMapShown()
+        displayMapHidden()
         print()
 
         userInput = input("column,row: ")
