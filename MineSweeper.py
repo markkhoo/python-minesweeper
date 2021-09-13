@@ -9,6 +9,9 @@ bombsMax = 1
 bombsMin = 1
 gameMapHidden = []
 gameMapShown = []
+squareBomb = 'X'
+squareEmptyHidden = '.'
+squareEmptyShown = 'O'
 
 
 def displayMapShown():
@@ -32,13 +35,14 @@ def displayMapHidden():
 def bombAdjCount(row, col):
     global xy
     global gameMapHidden
+    global squareBomb
 
     result = 0
 
     if row < 0 or col < 0 or row >= xy or col >= xy:
         result = 0
     else:
-        if gameMapHidden[row][col] == "X":
+        if gameMapHidden[row][col] == squareBomb:
             result = 1
 
     return result
@@ -112,14 +116,14 @@ while True:
     # GAME Generate Map
     elif gameState == 3:
 
-        mapSequence = sample(['.', 'X'], counts=[xy * xy - bombs, bombs], k=xy * xy)
+        mapSequence = sample([squareEmptyHidden, squareBomb], counts=[xy * xy - bombs, bombs], k=xy * xy)
 
         for i in range(xy):
             rowHidden = []
             rowShown = []
             for j in range(xy):
                 rowHidden.append(mapSequence[i * xy + j])
-                rowShown.append("O")
+                rowShown.append(squareEmptyShown)
             gameMapHidden.append(rowHidden)
             gameMapShown.append(rowShown)
 
@@ -146,7 +150,7 @@ while True:
                 # Mid Left
                 adjCount += bombAdjCount(i, j - 1)
 
-                if gameMapHidden[i][j] == "." and adjCount > 0:
+                if gameMapHidden[i][j] == squareEmptyHidden and adjCount > 0:
                     gameMapHidden[i][j] = adjCount
 
         gameState += 1
@@ -161,7 +165,7 @@ while True:
         print()
         displayMapHidden()
         print()
-
+        displayMapShown()
         userInput = input("column,row: ")
         userInput = userInput.replace(" ", "").split(",")
 
@@ -170,15 +174,35 @@ while True:
             print("Invalid input! Enter an input as 'column, row'")
             print("(Example: 1,1 - to select top left corner)")
 
-        elif userInput[0].isdigit() and userInput[1].isdigit():
-            userInput = [int(userInput[0]), int(userInput[1])]
-            print(userInput)
+        elif userInput[0].isdigit() and userInput[1].isdigit() and int(userInput[0]) > 0 and int(userInput[1]) > 0 and int(userInput[0]) <= xy and int(userInput[1]) <= xy:
+            userInput = [int(userInput[0]) - 1, int(userInput[1]) - 1]
+
+            selectedSquare = gameMapHidden[userInput[1]][userInput[0]]
+
+            # When a bomb is selected
+            if selectedSquare == squareBomb:
+                print()
+                print("Hit a mine!")
+                print()
+                gameState += 1
+            
+            # When an empty tile is selected
+            elif selectedSquare == squareEmptyHidden:
+                print(selectedSquare)
+
+            # When a number tile is selected
+            else:
+                gameMapShown[userInput[1]][userInput[0]] = gameMapHidden[userInput[1]][userInput[0]]
 
         else:
             print()
-            print("Invalid input! Enter an input as 'column, row'")
+            print("Invalid input! Enter an input as 'column, row' within the bounds of the map.")
             print("(Example: 1,1 - to select top left corner)")
 
     else:
         
+        print()
+        print("Game Over")
+        print()
+
         gameState = 0
