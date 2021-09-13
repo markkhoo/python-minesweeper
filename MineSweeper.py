@@ -187,6 +187,8 @@ while True:
     # USER inputs col/row coords to play the game
     elif gameState == 4:
         print()
+        # displayMapHidden()
+        # print()
         displayMapShown()
         print()
 
@@ -199,15 +201,19 @@ while True:
             print("(Example: 1,1 - to select top left corner)")
 
         elif userInput[0].isdigit() and userInput[1].isdigit() and int(userInput[0]) > 0 and int(userInput[1]) > 0 and int(userInput[0]) <= xy and int(userInput[1]) <= xy:
+
             userInput = [int(userInput[0]) - 1, int(userInput[1]) - 1]
 
             selectedSquare = gameMapHidden[userInput[1]][userInput[0]]
 
             # When a bomb is selected
             if selectedSquare == squareBomb:
+                gameMapShown[userInput[1]][userInput[0]] = selectedSquare
+                print()
+                displayMapShown()
                 print()
                 print("Hit a mine!")
-                print()
+
                 gameState += 1
             
             # When an empty tile is selected
@@ -223,14 +229,21 @@ while True:
 
             # Check map for winning state
             unselectedTileCount = 0
+            bombCheckAtWin = 0
             for i in range(xy):
                 unselectedTileCount += gameMapShown[i].count(squareEmptyShown)
-            if unselectedTileCount == bombs:
+                bombCheckAtWin += gameMapShown[i].count(squareBomb)
+            if bombCheckAtWin > 0:
+                print()
+                displayMapShown()
+                print()
+                print("Hit a mine!")
+                gameState += 1
+            elif unselectedTileCount == bombs:
                 print()
                 displayMapShown()
                 print()
                 print("You win!")
-                print()
                 gameState += 1
 
         else:
