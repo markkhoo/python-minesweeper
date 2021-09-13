@@ -41,11 +41,35 @@ def bombAdjCount(row, col):
 
     if row < 0 or col < 0 or row >= xy or col >= xy:
         result = 0
-    else:
-        if gameMapHidden[row][col] == squareBomb:
-            result = 1
+    elif gameMapHidden[row][col] == squareBomb:
+        result = 1
 
     return result
+
+def recursionOnEmpty(row, col):
+    global xy
+    global gameMapHidden
+    global gameMapShown
+    global squareBomb
+    global squareEmptyHidden
+
+    if row < 0 or col < 0 or row >= xy or col >= xy:
+        return
+    elif gameMapHidden[row][col] == squareBomb:
+        return
+    elif type(gameMapHidden[row][col]) is int and gameMapHidden[row][col] >= 0 and gameMapHidden[row][col] <=9:
+        gameMapShown[row][col] = gameMapHidden[row][col]
+        return
+    elif gameMapShown[row][col] == gameMapHidden[row][col]:
+        return
+    elif gameMapHidden[row][col] == squareEmptyHidden:
+        gameMapShown[row][col] = gameMapHidden[row][col]
+
+        # Recursively return adjacent to the selected tile starting from the upper left going clockwise
+        return (recursionOnEmpty(row - 1, col - 1), recursionOnEmpty(row - 1, col), recursionOnEmpty(row - 1, col + 1), recursionOnEmpty(row, col + 1), recursionOnEmpty(row + 1, col + 1), recursionOnEmpty(row + 1, col), recursionOnEmpty(row + 1, col - 1), recursionOnEmpty(row, col - 1))
+
+    else:
+        return
 
 while True:
     # Reset Global Variables
@@ -187,12 +211,15 @@ while True:
                 gameState += 1
             
             # When an empty tile is selected
-            elif selectedSquare == squareEmptyHidden:
-                print(selectedSquare)
+            elif selectedSquare == squareEmptyHidden and selectedSquare != gameMapShown[userInput[1]][userInput[0]]:
+                recursionOnEmpty(userInput[0], userInput[1])
 
             # When a number tile is selected
-            else:
+            elif type(selectedSquare) is int and selectedSquare >=0 and selectedSquare <= 9:
                 gameMapShown[userInput[1]][userInput[0]] = gameMapHidden[userInput[1]][userInput[0]]
+
+            else:
+                pass
 
         else:
             print()
