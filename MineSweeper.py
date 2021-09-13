@@ -187,9 +187,9 @@ while True:
     # USER inputs col/row coords to play the game
     elif gameState == 4:
         print()
-        displayMapHidden()
-        print()
         displayMapShown()
+        print()
+
         userInput = input("column,row: ")
         userInput = userInput.replace(" ", "").split(",")
 
@@ -220,6 +220,18 @@ while True:
 
             else:
                 pass
+
+            # Check map for winning state
+            unselectedTileCount = 0
+            for i in range(xy):
+                unselectedTileCount += gameMapShown[i].count(squareEmptyShown)
+            if unselectedTileCount == bombs:
+                print()
+                displayMapShown()
+                print()
+                print("You win!")
+                print()
+                gameState += 1
 
         else:
             print()
