@@ -128,8 +128,7 @@ while True:
                 gameState += 1
             else:
                 print()
-                print("Invalid Input, Enter a Integer between ",
-                      bombsMin, " and ", bombsMax)
+                print("Invalid Input, Enter a Integer between ", bombsMin, " and ", bombsMax)
                 print()
 
         else:
